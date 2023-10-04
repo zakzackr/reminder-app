@@ -7,19 +7,21 @@ import com.zakzackr.reminder.service.ReminderService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("api/reminder")
+@RequestMapping("/api/reminder")
 @AllArgsConstructor
 public class ReminderController {
 
     private ReminderService reminderService;
 
-    @GetMapping("{userId}/{reminderId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/{userId}/{reminderId}")
     public ResponseEntity<ReminderDto> getReminder(@PathVariable Long userId,
                                                    @PathVariable Long reminderId){
 
@@ -27,13 +29,15 @@ public class ReminderController {
         return ResponseEntity.ok(reminderDto);
     }
 
-    @GetMapping("{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @GetMapping("/{userId}")
     public ResponseEntity<List<ReminderDto>> getAllReminders(@PathVariable Long userId){
         List<ReminderDto> reminderDtos = reminderService.getAllReminders(userId);
         return ResponseEntity.ok(reminderDtos);
     }
 
-    @PostMapping("{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PostMapping("/{userId}")
     public ResponseEntity<ReminderDto> addReminder(@PathVariable Long userId,
                                                    @RequestBody ReminderDto newReminderDto){
 
@@ -41,7 +45,8 @@ public class ReminderController {
         return new ResponseEntity<>(reminderDto, HttpStatus.CREATED);
     }
 
-    @PutMapping("{userId}/{reminderId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{userId}/{reminderId}")
     public ResponseEntity<ReminderDto> updateReminder(@PathVariable Long userId,
                                                       @PathVariable Long reminderId,
                                                       @RequestBody ReminderDto updatedReminderDto){
@@ -51,7 +56,8 @@ public class ReminderController {
         return ResponseEntity.ok(reminderDto);
     }
 
-    @DeleteMapping("{userId}/{reminderId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @DeleteMapping("/{userId}/{reminderId}")
     public ResponseEntity<String> deleteReminder(@PathVariable Long userId,
                                                  @PathVariable Long reminderId) {
 

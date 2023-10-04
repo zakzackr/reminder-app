@@ -6,26 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
-
 @Entity
-@Table(name = "reminders")
+@Table(name = "roles")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Reminder {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private String title;
-    private String notes;
-//    @Column(nullable = false)
-    private Date date;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private String role;
 }
