@@ -1,12 +1,15 @@
 package com.zakzackr.reminder.service.impl;
 
+import com.zakzackr.reminder.dto.JwtAuthResponse;
 import com.zakzackr.reminder.dto.LoginDto;
 import com.zakzackr.reminder.dto.RegisterDto;
 import com.zakzackr.reminder.entity.Role;
 import com.zakzackr.reminder.entity.User;
 import com.zakzackr.reminder.exception.ReminderAPIException;
+import com.zakzackr.reminder.exception.ResourceNotFoundException;
 import com.zakzackr.reminder.repository.RoleRepository;
 import com.zakzackr.reminder.repository.UserRepository;
+import com.zakzackr.reminder.security.JwtTokenProvider;
 import com.zakzackr.reminder.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,9 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.swing.text.html.Option;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -29,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
+    private JwtTokenProvider jwtTokenProvider;
 
     @Override
     public String register(RegisterDto registerDto) {
@@ -56,8 +61,8 @@ public class AuthServiceImpl implements AuthService {
         return "Successfully registered!!";
     }
 
-    @PostMapping("/login")
-    public String login(LoginDto loginDto){
+    @Override
+    public JwtAuthResponse login(LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsernameOrEmail(),
                 loginDto.getPassword()
@@ -65,6 +70,26 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return "Login Success!";
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        Optional<User> userOptional = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail());
+
+        String role = null;
+
+        if (userOptional.isPresent()){
+            User loggedInUser = userOptional.get();
+            Optional<Role> roleOptional = loggedInUser.getRoles().stream().findFirst();
+
+            if (roleOptional.isPresent()){
+                Role userRole = roleOptional.get();
+                role = userRole.getRole();
+            }
+        }
+
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+        jwtAuthResponse.setRole(role);
+
+        return jwtAuthResponse;
     }
 }

@@ -21,7 +21,7 @@ public class Reminder {
 
     @Column(nullable = false)
     private String title;
-    private String notes;
+    private String note;
 //    @Column(nullable = false)
     private Date date;
 
