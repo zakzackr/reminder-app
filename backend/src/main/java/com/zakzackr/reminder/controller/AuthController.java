@@ -1,5 +1,6 @@
 package com.zakzackr.reminder.controller;
 
+import com.zakzackr.reminder.dto.JwtAuthResponse;
 import com.zakzackr.reminder.dto.LoginDto;
 import com.zakzackr.reminder.dto.RegisterDto;
 import com.zakzackr.reminder.service.AuthService;
@@ -26,9 +27,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
-        String response = authService.login(loginDto);
+    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginDto loginDto){
+        JwtAuthResponse jwtAuthResponse = authService.login(loginDto);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(jwtAuthResponse);
     }
 }

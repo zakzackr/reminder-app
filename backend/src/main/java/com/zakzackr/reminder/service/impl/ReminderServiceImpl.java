@@ -61,7 +61,7 @@ public class ReminderServiceImpl implements ReminderService {
                 .orElseThrow(() -> new ResourceNotFoundException("The resource does not exist."));
 
         reminder.setTitle(reminderDto.getTitle());
-        reminder.setNotes(reminderDto.getNote());
+        reminder.setNote(reminderDto.getNote());
         reminder.setDate(reminderDto.getDate());
         Reminder updatedReminder = reminderRepository.save(reminder);
 
