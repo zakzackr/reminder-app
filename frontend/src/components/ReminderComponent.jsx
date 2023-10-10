@@ -3,14 +3,26 @@ import { addReminder, getReminder, updateReminder } from '../services/ReminderSe
 import { useNavigate, useParams } from 'react-router'
 import { getUserId } from '../services/AuthService'
 
+
+import DateTimePicker from 'react-datetime-picker'
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
+import { Controller, useForm } from 'react-hook-form'
+
+
+
 const ReminderComponent = () => {
 
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
-    const [date, setDate] = useState(false)
+    const [date, setDate] = useState()
     const nav = useNavigate()
     const { id } = useParams();
     const userId = getUserId();
+
+    const { control, formState: { errors } } = useForm();
+
 
     useEffect(() => {
         
@@ -93,7 +105,7 @@ const ReminderComponent = () => {
 
                             <div className='form-group mb-2'>
                                 <label className='form-label'>Date:</label>
-                                <input 
+                                {/* <input 
                                     type='text'
                                     className='form-control'
                                     placeholder='Enter date'
@@ -101,8 +113,23 @@ const ReminderComponent = () => {
                                     value={date}
                                     onChange={(e) => setDate(e.target.value)}
                                 >
-                                </input>
+                                </input> */}
+                                <DateTimePicker 
+                                    className='form-control'
+                                    format='y/MM/dd HH:mm' 
+                                    minDate={new Date()}
+                                    onChange={setDate} 
+                                    value={date}
+                                    disableCalendar={true}
+                                    disableClock={true}
+                                    // hourPlaceholder='hh'
+                                    // minutePlaceholder='mm'
+                                    // yearPlaceholder='yyyy'
+                                    // monthPlaceholder='mm'
+                                    // dayPlaceholder='dd'
+                                    />
                             </div>
+
                             <button className='btn btn-success' onClick={(e) => saveOrUpdateReminder(e)}>Submit</button>
                         </form>
                     </div>
