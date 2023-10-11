@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,5 +15,5 @@ public class ReminderDto {
     private Long id;
     private String title;
     private String note;
-    private LocalDateTime date;
+    private ZonedDateTime date;
 }
