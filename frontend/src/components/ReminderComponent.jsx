@@ -8,9 +8,6 @@ import DateTimePicker from 'react-datetime-picker'
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
-import { Controller, useForm } from 'react-hook-form'
-
-
 
 const ReminderComponent = () => {
 
@@ -18,11 +15,8 @@ const ReminderComponent = () => {
     const [note, setNote] = useState('')
     const [date, setDate] = useState()
     const nav = useNavigate()
-    const { id } = useParams();
-    const userId = getUserId();
-
-    const { control, formState: { errors } } = useForm();
-
+    const { id } = useParams()
+    const userId = getUserId()
 
     useEffect(() => {
         
@@ -54,6 +48,8 @@ const ReminderComponent = () => {
         } else {
             addReminder(userId, reminder).then((response) => {
                 console.log(response)
+                console.log(typeof reminder.date)  // : Object
+                console.log(typeof response.data.date) // : String
                 nav(`/reminder/${userId}`)
             }).catch(error => {
                 console.error(error)
@@ -105,18 +101,9 @@ const ReminderComponent = () => {
 
                             <div className='form-group mb-2'>
                                 <label className='form-label'>Date:</label>
-                                {/* <input 
-                                    type='text'
-                                    className='form-control'
-                                    placeholder='Enter date'
-                                    name='date'
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
-                                >
-                                </input> */}
                                 <DateTimePicker 
                                     className='form-control'
-                                    format='y/MM/dd HH:mm' 
+                                    format='yyyy/MM/dd HH:mm' 
                                     minDate={new Date()}
                                     onChange={setDate} 
                                     value={date}
