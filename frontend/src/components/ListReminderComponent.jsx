@@ -41,6 +41,20 @@ const ListReminderComponent = () => {
         })
     }
 
+    function dateTimeConverter(date){
+        // console.log(typeof date)  // date: String in ISO 8601 format
+        const dateObj = new Date(date)  // dateObj represents date/time in the user's local time zone
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0'); 
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const hours = String(dateObj.getHours()).padStart(2, '0');
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+        const formattedDate = `${year}/${month}/${day} ${hours}:${minutes}`;
+
+        return formattedDate;
+    }
+
     return (
         <div className='container'>
             <h2 className='text-center mt-2'>List</h2>
@@ -62,7 +76,7 @@ const ListReminderComponent = () => {
                                 <tr key={reminder.id}>
                                     <td>{reminder.title}</td>
                                     <td>{reminder.note}</td>
-                                    <td>{reminder.date}</td>
+                                    <td>{dateTimeConverter(reminder.date)}</td>
                                     <td>
                                         {
                                             isAdmin &&
