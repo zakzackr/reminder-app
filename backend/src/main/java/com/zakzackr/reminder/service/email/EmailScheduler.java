@@ -3,7 +3,6 @@ package com.zakzackr.reminder.service.email;
 import com.zakzackr.reminder.entity.Reminder;
 import com.zakzackr.reminder.entity.User;
 import com.zakzackr.reminder.repository.ReminderRepository;
-import com.zakzackr.reminder.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,16 +17,13 @@ import java.util.Optional;
 @AllArgsConstructor
 public class EmailScheduler {
 
-    private UserRepository userRepository;
     private ReminderRepository reminderRepository;
     private EmailSenderService senderService;
 
     @Scheduled(cron = "0 * * * * ?")
     public void checkAndSendScheduledEmails(){
-        // convert to JPT
-
         // make second/nanosecond zero
-        ZonedDateTime current = ZonedDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+        ZonedDateTime current = ZonedDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MINUTES);
         Optional<List<Reminder>> reminderOptional = reminderRepository.findByDate(current);
 
         if (reminderOptional.isPresent()){

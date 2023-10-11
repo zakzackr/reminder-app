@@ -22,7 +22,7 @@ public class Reminder {
     @Column(nullable = false)
     private String title;
     private String note;
-//    @Column(nullable = false)
+    @Column(nullable = false)
     private ZonedDateTime date;
 
     @ManyToOne
