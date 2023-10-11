@@ -15,5 +15,5 @@ public class ReminderDto {
     private Long id;
     private String title;
     private String note;
-    private ZonedDateTime date;
+    private ZonedDateTime date;  // UTC in ISO 8601 format
 }
