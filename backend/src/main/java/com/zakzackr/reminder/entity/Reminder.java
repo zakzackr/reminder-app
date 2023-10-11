@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "reminders")
@@ -23,7 +23,7 @@ public class Reminder {
     private String title;
     private String note;
 //    @Column(nullable = false)
-    private LocalDateTime date;
+    private ZonedDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
