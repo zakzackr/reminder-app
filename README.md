@@ -30,8 +30,9 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
 * 新規タスクの追加（New Reminder）: Title（要件）、Notes（詳細）、Date（通知時間）を指定
 * 既存タスクの更新（Update）: 既存タスクのTitle, Notes, Dateを変更
 * 既存タスクの削除（Delete）: 既存タスクを削除
+    
+*通常のユーザーは、User権限を付与さるため、Update機能を使用することができません。
 <br>
-
 
 # 📈 作成の経緯
 ✅ iPhoneのRemindersアプリからの通知の場合、他のアプリの通知に埋もれてしまうことがあったので、メールでリマインドを行うリマインダーアプリを作成しました。
@@ -50,4 +51,5 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
 <br>
 
 # 🔜 今後の計画
+- [ ] 
 - [ ] UIの向上
