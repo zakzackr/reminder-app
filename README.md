@@ -46,7 +46,8 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
   -> 通知タスクを探索・送信する関数を定期的に実行して、現在の時刻と通知時間が一致しているタスクをデータベースから取得して、そのユーザー宛にメールを送信する    
   -> Reminderテーブル内で、外部キーとしてuserIDを保持することで、通知するタスクとその受信者を結びつける
          
-* Spring Bootアプリからメールを送信するための実装（SimpleMailMessageクラスを使用）
+* Spring Bootアプリからメールを送信するための実装
+  -> SimpleMailMessageクラスを使用
 <br>    
 
 # 🌈 こだわりポイント
