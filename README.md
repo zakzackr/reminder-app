@@ -50,4 +50,4 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
 <br>
 
 # 🔜 今後の計画
--[ ] UIの向上
+- [ ] UIの向上
