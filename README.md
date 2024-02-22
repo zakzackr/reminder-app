@@ -22,15 +22,6 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
 | Others | Git, GitHub |
 <br>      
 
-# ER図
-```mermaid
-  graph TD;
-      A-->B;
-      A-->C;
-      B-->D;
-      C-->D;
-```
-
 # 📝 説明
 リマインダーアプリを使用することで、1分単位でリマインドするタスクを設定でき、指定した時間にメールで通知を受け取ることができます。
 
