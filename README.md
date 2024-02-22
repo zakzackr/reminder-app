@@ -22,6 +22,11 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
 | Others | Git, GitHub |
 <br>      
 
+# ER図
+![reminder-erd](https://github.com/zakzackr/reminder-app/assets/100734822/a3c3a3bf-a335-469e-a833-134d63f49b9c)
+
+<br>      
+
 # 📝 説明
 リマインダーアプリを使用することで、1分単位でリマインドするタスクを設定でき、指定した時間にメールで通知を受け取ることができます。
 
