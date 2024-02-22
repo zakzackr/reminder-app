@@ -22,7 +22,7 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
 | Others | Git, GitHub |
 <br>      
 
-# ER図
+# 📊 ER図
 ![reminder-erd](https://github.com/zakzackr/reminder-app/assets/100734822/a3c3a3bf-a335-469e-a833-134d63f49b9c)
 
 <br>      
