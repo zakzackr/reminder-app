@@ -4,7 +4,8 @@
 <br>    
 
 # ✨ Demo
-![reminder-app](https://github.com/zakzackr/reminder-app/assets/100734822/e9f49472-8762-4681-ac8b-657ecfd840dc)
+https://github.com/zakzackr/reminder-app/assets/100734822/f9333ca8-6e3f-4b27-8e2f-926ddf7a6b37
+
 <br>     
 
 # 📍 URL
