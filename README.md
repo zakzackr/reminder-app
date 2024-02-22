@@ -23,7 +23,7 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
 <br>      
 
 # 📊 ER図
-![reminder-erdのコピー](https://github.com/zakzackr/reminder-app/assets/100734822/b0cab31e-53b5-4edf-bc84-dc4bd5adaf0f)
+![reminder-erd](https://github.com/zakzackr/reminder-app/assets/100734822/0fa46628-4808-4e98-8875-6ffc895e73df)
 
 <br>      
 
