@@ -34,8 +34,8 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
 **主な操作：**
 * 新規ユーザー登録（Register）: ユーザー名、メールアドレス、パスワードを使用して新規ユーザー登録
 * ログイン（Login）: メールアドレスまたはユーザー名、パスワードを使用してログイン
-* 新規タスクの追加（New Reminder）: Title（要件）、Notes（詳細）、Date（通知時間）を指定
-* 既存タスクの更新（Update）: 既存タスクのTitle, Notes, Dateを変更
+* 新規タスクの追加（New Reminder）: Title（要件）、Notes（詳細）、Date（通知時間）を指定して新規タスクの追加
+* 既存タスクの更新（Update）: Title、 Notes、Dateを変更して、既存タスクの更新
 * 既存タスクの削除（Delete）: 既存タスクを削除
     
 *通常のユーザーは、User権限が付与さるため、Update機能を使用することができません。
