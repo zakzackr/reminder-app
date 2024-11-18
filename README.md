@@ -69,7 +69,7 @@ Reminderアプリでは、マルチユーザーに対応しており、個々の
 | 更新 |PUT|`api/reminder/{userId}/{reminderId}`|
 | 削除 |DELTE|`api/reminder/{userId}/{reminderId}`|
 
-Controller内でuserIdやreminderIdを指定してServiceのメソッドを呼び出すことができ、特定のユーザーの特定のリマインダータスクに対して操作を行うことができます。これにより、各ユーザー専用のリマインダーを設定・管理することが可能となり、マルチユーザー対応のReminderアプリを実現しています。
+これにより、Controller内でuserIdやreminderIdを指定してServiceのメソッドを呼び出す事で、特定のユーザーの特定のリマインダータスクに対して操作を行うことができ、マルチユーザー対応のReminderアプリを実現しています。
 <br>
 
 ### Spring Security導入による認証・認可
