@@ -61,7 +61,6 @@ Reminderアプリでは、マルチユーザーに対応しており、個々の
 
 具体的には、ユーザーがリマインダーを取得、追加する際、セッションストレージから取り出したユーザーIDをHTTPリクエストのURLに含めて送信します。
 
-、'api/reminder/{userId}/{reminderId}`、追加時には、`api/reminder/{userId}`
 
 | 操作 |HTTPメソッド| URL |
 | ---- | ---- |---|
