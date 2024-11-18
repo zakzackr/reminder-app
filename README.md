@@ -9,7 +9,9 @@ https://github.com/zakzackr/reminder-app/assets/100734822/f9333ca8-6e3f-4b27-8e2
 <br>     
 
 # 📍 URL
-http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com
+http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com<br>    
+(↑AWS無料枠超過のためEC2、RDS停止中)
+<br>    
 <br>      
 
 # 💾 技術スタック
