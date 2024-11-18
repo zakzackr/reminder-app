@@ -63,12 +63,12 @@ Reminderアプリでは、マルチユーザーに対応しており、個々の
 
 、'api/reminder/{userId}/{reminderId}`、追加時には、`api/reminder/{userId}`
 
-| Category |HTTPメソッド| Tech Stack |
+| 操作 |HTTPメソッド| URL |
 | ---- | ---- |---|
-| 取得 |GET |'api/reminder/{userId}`|
+| 取得 |GET |`api/reminder/{userId}`|
 | 追加 |POST|`api/reminder/{userId}`|
-| 更新 |PUT|'api/reminder/{userId}/{reminderId}` |
-| 削除 |DELTE|'api/reminder/{userId}/{reminderId}`|
+| 更新 |PUT|`api/reminder/{userId}/{reminderId}`|
+| 削除 |DELTE|`api/reminder/{userId}/{reminderId}`|
 
 
 
