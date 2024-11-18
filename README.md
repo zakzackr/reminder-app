@@ -68,8 +68,7 @@ Reminderアプリでは、マルチユーザーに対応しており、個々の
 | 更新 |PUT|`api/reminder/{userId}/{reminderId}`|
 | 削除 |DELTE|`api/reminder/{userId}/{reminderId}`|
 
-
-
+#### 認可情報の設定
 
 　　　　　　　　　　　
 <br>
