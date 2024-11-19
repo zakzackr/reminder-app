@@ -98,7 +98,7 @@ ___
 Reminderアプリでは、1分単位でリマインダーを設定することができます。
 <br>  
 #### @Scheduledの使用
-`@Scheduled(cron = "0 * * * * ?")`を`EmailScheduler.checkAndSendScheduledEmails()`に付与し、このServiceメソッドを1分に1回実行します。その内部で、現在時刻と通知時刻が一致しているタスクをデータベースからクエリする`ReminderRepository.findByDate()`を呼び出します。そして、取得したリマインダーリストからユーザーとリマインダーの情報を取得し、そのユーザー宛に`SenderService.sendScheduledEmail()`でメールを送信します。
+`@Scheduled(cron = "0 * * * * ?")`を`EmailScheduler.checkAndSendScheduledEmails()`に付与することで、このServiceメソッドを1分に1回実行します。その内部で、現在時刻と通知時刻が一致しているタスクをデータベースからクエリする`ReminderRepository.findByDate()`を呼び出します。そして、取得したリマインダーリストからユーザーとリマインダーの情報を取得し、そのユーザー宛に`SenderService.sendScheduledEmail()`でメールを送信します。
 <br>  
 ___
 
