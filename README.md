@@ -52,7 +52,7 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com<br>
 # 🌈 こだわりポイント
 ### ⭐️ マルチユーザー対応    
 Reminderアプリでは、マルチユーザーに対応しており、個々のユーザーが個別のリマインダーを設定することができます。以下を工夫することで、リマインダーを一意に特定できる仕組みを構築しています。
-<br> 
+<br>
 #### データベース設計
 リマインダーテーブルで外部キーとしてユーザーIDを保持することで、特定のリマインダーとユーザーを対応づけています。
 <br> 
@@ -69,7 +69,7 @@ Reminderアプリでは、マルチユーザーに対応しており、個々の
 | 取得 |GET |`api/reminder/{userId}`|
 | 追加 |POST|`api/reminder/{userId}`|
 | 更新 |PUT|`api/reminder/{userId}/{reminderId}`|
-| 削除 |DELTE|`api/reminder/{userId}/{reminderId}`|
+| 削除 |DELETE|`api/reminder/{userId}/{reminderId}`|
 
 これにより、Controller内でuserIdやreminderIdを指定してServiceメソッドを呼び出すことができ、特定のユーザーの特定のリマインダータスクに対して操作を行うことができます。このようにして、マルチユーザー対応のReminderアプリを実現しています。
 <br>
@@ -84,6 +84,7 @@ ___
 3. クライアント側では、JWTをブラウザのローカルストレージに保存します。
 5. ログイン後は、JWTの有効期限が切れるまで、同じJWTを使用してリクエストを送信します。具体的には、リクエストのAuthenticationヘッダにJWTを含めます。
 6. アプリケーションはリクエストを受け取ると、秘密鍵を使用してJWTが有効か検証します。有効であれば、その後の処理が行われます。
+<br><br> 
 
 #### 認可
 Spring Securityの`@PreAuthorize`を使用して認可機能を実現しています。リクエストが@PreAuthorizeの付与されたコントローラに到達すると、ユーザーのロール情報と指定されたアクセスポリシーが一致するかが確認されます。<br>
