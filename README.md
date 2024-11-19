@@ -41,7 +41,7 @@ http://reminder-app-2.s3-website-ap-northeast-1.amazonaws.com<br>
 * 既存タスクの削除（Delete）: 既存タスクを削除
 
 > [!NOTE]
-> 通常のユーザーは、User権限が付与されるため、Update機能を使用することができません。
+> 通常のユーザーはUser権限が付与されるため、Update機能を使用することができません。
 <br>    
 
 # 📈 作成の経緯
