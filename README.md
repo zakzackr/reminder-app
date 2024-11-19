@@ -86,8 +86,12 @@ ___
 6. アプリケーションはリクエストを受け取ると、秘密鍵を使用してJWTが有効か検証します。有効であれば、その後の処理が行われます。
 
 #### 認可
-Spring Securityの`@PreAuthorize`を使用して認可機能を実現しています。@PreAuthorizeの付与されたコントローラがリクエストを受け取ると、ユーザーのロール情報と指定されたアクセスポリシーが一致するかを調べます。<br>
-具体的には、`@PreAuthorize("hasRole('ADMIN')"), @PreAuthorize("hasAnyRole('ADMIN', 'USER')")`と現在アクセスしているユーザーの認証情報である`Authentication`オブジェクト内のロール情報（Admin, Userロール）を比較することにより認可を行っています。
+Spring Securityの`@PreAuthorize`を使用して認可機能を実現しています。リクエストが@PreAuthorizeの付与されたコントローラに到達すると、ユーザーのロール情報と指定されたアクセスポリシーが一致するかが確認されます。<br>
+
+具体的には、現在アクセスしているユーザーの認証情報である`Authentication`オブジェクト内のロール情報と、指定されたアクセスポリシーを比較して認可を行います。
+
+* `@PreAuthorize("hasRole('ADMIN')")`：ユーザーがADMINロールを持っている場合にのみアクセスを許可
+* `@PreAuthorize("hasAnyRole('ADMIN', 'USER')")`：ユーザーが「ADMIN」または「USER」ロールを持っている場合にアクセスを許可
 ___
 
 ### ⏳ 1分単位でリマインダーを設定できる    
