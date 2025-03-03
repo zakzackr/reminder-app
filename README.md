@@ -69,10 +69,10 @@ Reminderアプリでは、マルチユーザーに対応しており、個々の
 
 | 操作 |HTTPメソッド| URL |
 | ---- | ---- |---|
-| 取得 |GET |`api/reminder/{userId}`|
-| 追加 |POST|`api/reminder/{userId}`|
-| 更新 |PUT|`api/reminder/{userId}/{reminderId}`|
-| 削除 |DELETE|`api/reminder/{userId}/{reminderId}`|
+| 取得 |GET |`/api/reminder/{userId}`|
+| 追加 |POST|`/api/reminder/{userId}`|
+| 更新 |PUT|`/api/reminder/{userId}/{reminderId}`|
+| 削除 |DELETE|`/api/reminder/{userId}/{reminderId}`|
 
 これにより、Controller内でuserIdやreminderIdを指定してServiceメソッドを呼び出すことができ、特定のユーザーの特定のリマインダータスクに対して操作を行うことができます。このようにして、マルチユーザー対応のReminderアプリを実現しています。
 <br>
