@@ -6,24 +6,25 @@ import com.zakzackr.reminder.dto.RegisterDto;
 import com.zakzackr.reminder.entity.Role;
 import com.zakzackr.reminder.entity.User;
 import com.zakzackr.reminder.exception.ReminderAPIException;
-import com.zakzackr.reminder.exception.ResourceNotFoundException;
 import com.zakzackr.reminder.repository.RoleRepository;
 import com.zakzackr.reminder.repository.UserRepository;
 import com.zakzackr.reminder.security.JwtTokenProvider;
 import com.zakzackr.reminder.service.AuthService;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 
 @Service
 @AllArgsConstructor
@@ -34,6 +35,7 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
+    private UserDetailsService userDetailsService;
 
     @Override
     public String register(RegisterDto registerDto) {
@@ -51,10 +53,8 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(registerDto.getEmail());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
 
-        Set<Role> roles = new HashSet<>();
         Role role = roleRepository.findByRole("ROLE_USER");
-        roles.add(role);
-        user.setRoles(roles);
+        user.setRole(role); 
 
         userRepository.save(user);
 
@@ -63,6 +63,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public JwtAuthResponse login(LoginDto loginDto){
+//        it is passing the UsernamePasswordAuthenticationToken to the default AuthenticationProvider,
+//        which will use the userDetailsService to get the user based on username and compare that user's password with the one in the authentication token.
+
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginDto.getUsernameOrEmail(),
                 loginDto.getPassword()
@@ -70,30 +73,47 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = jwtTokenProvider.generateToken(authentication);
+        String accessToken = jwtTokenProvider.generateAccessToken(authentication);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(authentication);
 
-        Optional<User> userOptional = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail());
+        // Optional<User> userOptional = userRepository.findByUsernameOrEmail(loginDto.getUsernameOrEmail(), loginDto.getUsernameOrEmail());
 
-        String role = null;
-        Long userId = null;
+        // String role = null;
+        // Long userId = null;
 
-        if (userOptional.isPresent()){
-            User loggedInUser = userOptional.get();
-            Optional<Role> roleOptional = loggedInUser.getRoles().stream().findFirst();
+        // if (userOptional.isPresent()){
+        //     User loggedInUser = userOptional.get();
+        //     Optional<Role> roleOptional = Optional.ofNullable(loggedInUser.getRole());
 
-            userId = loggedInUser.getId();
+        //     userId = loggedInUser.getId();
 
-            if (roleOptional.isPresent()){
-                Role userRole = roleOptional.get();
-                role = userRole.getRole();
-            }
-        }
+        //     if (roleOptional.isPresent()){
+        //         Role userRole = roleOptional.get();
+        //         role = userRole.getRole();
+        //     }
+        // }
 
-        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
-        jwtAuthResponse.setAccessToken(token);
-        jwtAuthResponse.setRole(role);
-        jwtAuthResponse.setUserId(userId);
+        JwtAuthResponse jwtAuthResponse = new JwtAuthResponse(accessToken, refreshToken);
 
         return jwtAuthResponse;
     }
+
+    // create new access token using valid refresh token
+    public JwtAuthResponse refreshAccessToken(String refreshToken){
+        jwtTokenProvider.validateRefreshToken(refreshToken);
+
+        String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+            userDetails, 
+            null, 
+            userDetails.getAuthorities()
+        );
+
+        String newAccessToken = jwtTokenProvider.generateAccessToken(authentication);
+        String newRefreshToken = jwtTokenProvider.generateRefreshToken(authentication); 
+        return new JwtAuthResponse(newAccessToken, newRefreshToken);
+    } 
 }
+

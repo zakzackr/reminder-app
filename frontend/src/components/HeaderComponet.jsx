@@ -1,23 +1,24 @@
+import { useEffect, useContext } from 'react'
 import { NavLink, useNavigate } from "react-router-dom"
-import { getUserId, isUserLoggedIn, logout } from "../services/AuthService"
+import { AuthContext } from "../contexts/AuthContext"
+import { logout } from '../services/AuthService'
 
 const HeaderComponent = () => {
 
-    const isAuth = isUserLoggedIn()
-    const nav = useNavigate()
-    const userId = getUserId();
+    // const nav = useNavigate()
+    const { isAuth, setIsAuth } = useContext(AuthContext);
 
-    function handleLogout(){
-        logout()
-        nav('/login')
-    }
+    // function handleLogout(){
+    //     setIsAuth(false)
+    //     nav('/login')
+    // }
 
     return (
         <div> 
             <header>
                 <nav className='navbar navbar-expand-md navbar-dark bg-dark'>
                     <div>
-                        <a href='http://localhost:3000' className='navbar-brand' style={{ paddingLeft: '10px' }}>
+                        <a href='/' className='navbar-brand' style={{ paddingLeft: '10px' }}>
                             Reminders
                         </a>
                     </div>
@@ -26,7 +27,7 @@ const HeaderComponent = () => {
                             {
                                 isAuth && 
                                 <li className='nav-item'>
-                                    <NavLink to={`/reminder/${userId}`}  className="nav-link">My Lists</NavLink>
+                                    <NavLink to={`/reminders`}  className="nav-link">My Lists</NavLink>
                                 </li>
                             }
                         </ul>
@@ -47,7 +48,7 @@ const HeaderComponent = () => {
                         {
                             isAuth && 
                             <li className='nav-item'>
-                                <NavLink to="/login" className="nav-link" onClick={handleLogout}>Logout</NavLink>
+                                <NavLink to="/login" className="nav-link" onClick={logout}>Logout</NavLink>
                             </li>
                         }
                     </ul>

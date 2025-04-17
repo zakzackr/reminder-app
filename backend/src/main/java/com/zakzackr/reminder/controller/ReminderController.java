@@ -1,70 +1,82 @@
 package com.zakzackr.reminder.controller;
 
 import com.zakzackr.reminder.dto.ReminderDto;
-import com.zakzackr.reminder.entity.Reminder;
-import com.zakzackr.reminder.repository.ReminderRepository;
 import com.zakzackr.reminder.service.ReminderService;
 import lombok.AllArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import com.zakzackr.reminder.security.CustomUserDetails;
+
 import java.util.List;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@RequestMapping("/api/reminder")
+@RequestMapping("reminders")
 @AllArgsConstructor
 public class ReminderController {
 
     private ReminderService reminderService;
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("/{userId}/{reminderId}")
-    public ResponseEntity<ReminderDto> getReminder(@PathVariable Long userId,
-                                                   @PathVariable Long reminderId){
+    @GetMapping("/{reminderId}")
+    public ResponseEntity<ReminderDto> getReminder(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                @PathVariable Long reminderId){
 
+        Long userId = userDetails.getUserId();
         ReminderDto reminderDto = reminderService.getReminder(userId, reminderId);
         return ResponseEntity.ok(reminderDto);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<ReminderDto>> getAllReminders(@PathVariable Long userId){
+    @GetMapping("")
+    public ResponseEntity<List<ReminderDto>> getAllReminders(@AuthenticationPrincipal CustomUserDetails userDetails){
+        Long userId = userDetails.getUserId();
         List<ReminderDto> reminderDtos = reminderService.getAllReminders(userId);
         return ResponseEntity.ok(reminderDtos);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @PostMapping("/{userId}")
-    public ResponseEntity<ReminderDto> addReminder(@PathVariable Long userId,
-                                                   @RequestBody ReminderDto newReminderDto){
+    @PostMapping("")
+    public ResponseEntity<ReminderDto> addReminder(
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        @RequestBody ReminderDto newReminderDto){
+
+        Long userId = userDetails.getUserId();
 
         ReminderDto reminderDto = reminderService.createReminder(userId, newReminderDto);
         return new ResponseEntity<>(reminderDto, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/{userId}/{reminderId}")
-    public ResponseEntity<ReminderDto> updateReminder(@PathVariable Long userId,
-                                                      @PathVariable Long reminderId,
-                                                      @RequestBody ReminderDto updatedReminderDto){
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PutMapping("/{reminderId}")
+    public ResponseEntity<ReminderDto> updateReminder(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                    @PathVariable Long reminderId,
+                                                    @RequestBody ReminderDto updatedReminderDto){
+        
+        Long userId = userDetails.getUserId();
         ReminderDto reminderDto = reminderService.updateReminder(userId, reminderId, updatedReminderDto);
 
         return ResponseEntity.ok(reminderDto);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    @DeleteMapping("/{userId}/{reminderId}")
-    public ResponseEntity<String> deleteReminder(@PathVariable Long userId,
-                                                 @PathVariable Long reminderId) {
+    @DeleteMapping("/{reminderId}")
+    public ResponseEntity<String> deleteReminder(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                                @PathVariable Long reminderId) {
 
+        Long userId = userDetails.getUserId();
         reminderService.deleteReminder(userId, reminderId);
 
         return ResponseEntity.ok("Deleted successfully.");
     }
 }
+
+
+
 
 

@@ -1,34 +1,27 @@
-import { useState } from "react"
-import { LoginAPICall, saveLoggedInUser, storeToken } from "../services/AuthService"
+import { useState, useContext } from "react"
+import { loginAPICall } from "../services/AuthService"
 import { useNavigate } from "react-router-dom"
+import { AuthContext } from "../contexts/AuthContext"
 
 const LoginComponent = () => {
-
+    
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const nav = useNavigate()
+    const { setIsAuth } = useContext(AuthContext)
     
     async function handleLoginForm(e){
 
         e.preventDefault()
 
-        await LoginAPICall(username, password).then((response) => {
-            console.log(response.data)
-
-
-            // const token = 'Basic ' + window.btoa(username + ":" + password)
-            const token = 'Bearer ' + response.data.accessToken
-            const role = response.data.role
-            const userId = response.data.userId
-
-
-            storeToken(token)
-            saveLoggedInUser(username, role, userId)
-            nav(`/reminder/${userId}`)
-
-            window.location.reload(false)
+        await loginAPICall(username, password).then(() => {
+            setIsAuth(true)
+            console.log('login');
+            nav(`/reminders`)
         }).catch(error => {
+            setIsAuth(false)
             console.error(error)
+            console.log('login failed');
         })
     }
 

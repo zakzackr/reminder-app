@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { addReminder, getReminder, updateReminder } from '../services/ReminderService'
 import { useNavigate, useParams } from 'react-router'
-import { getUserId } from '../services/AuthService'
-
 
 import DateTimePicker from 'react-datetime-picker'
 import 'react-datetime-picker/dist/DateTimePicker.css';
@@ -16,13 +14,11 @@ const ReminderComponent = () => {
     const [date, setDate] = useState()
     const nav = useNavigate()
     const { id } = useParams()
-    const userId = getUserId()
 
     useEffect(() => {
         
         if (id){
-            getReminder(id, userId).then((response) => {
-                console.log(response.data)
+            getReminder(id).then((response) => {
                 setTitle(response.data.title)
                 setNote(response.data.note)
                 setDate(response.data.date)
@@ -39,18 +35,17 @@ const ReminderComponent = () => {
         const reminder = {title, note, date}
 
         if (id){
-            updateReminder(id, userId, reminder).then((response) => {
-                console.log(response)
-                nav(`/reminder/${userId}`)
+            updateReminder(id, reminder).then((response) => {
+                nav(`/reminders`)
             }).catch(error => {
                 console.error(error)
             })
         } else {
-            addReminder(userId, reminder).then((response) => {
+            addReminder(reminder).then((response) => {
                 console.log(response)
                 console.log(typeof reminder.date)  // : Object
                 console.log(typeof response.data.date) // : String
-                nav(`/reminder/${userId}`)
+                nav(`/reminders`)
             }).catch(error => {
                 console.error(error)
             })

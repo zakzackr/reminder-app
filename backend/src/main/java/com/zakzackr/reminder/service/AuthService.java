@@ -8,4 +8,6 @@ public interface AuthService {
     String register(RegisterDto registerDto);
 
     JwtAuthResponse login(LoginDto loginDto);
+
+    JwtAuthResponse refreshAccessToken(String refreshToken);
 }

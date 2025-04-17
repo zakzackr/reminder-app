@@ -22,11 +22,6 @@ public class ReminderServiceImpl implements ReminderService {
     private UserRepository userRepository;
     private ModelMapper modelMapper;
 
-    // constructor injection
-//    public ReminderServiceImpl(ReminderRepository reminderRepository){
-//        this.reminderRepository = reminderRepository;
-//    }
-
     @Override
     public ReminderDto getReminder(Long userId, Long reminderId) {
         Reminder reminder = reminderRepository.findByIdAndUserId(reminderId, userId)
