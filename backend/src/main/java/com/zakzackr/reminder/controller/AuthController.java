@@ -102,6 +102,14 @@ public class AuthController {
             return ResponseEntity.ok(Map.of("accessToken", jwtAuthResponse.getAccessToken()));
         } catch (JwtException e) {
             System.out.println("refreshAccessToken() failed: " + e.getMessage());
+
+             // 無効なrefresh-tokenを削除する
+            Cookie clearCookie = new Cookie("refreshToken", null);
+            clearCookie.setHttpOnly(true);
+            clearCookie.setPath("/");
+            clearCookie.setMaxAge(0); // 有効期限0で削除
+            response.addCookie(clearCookie);
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("failed to refresh access token");
         }
     }

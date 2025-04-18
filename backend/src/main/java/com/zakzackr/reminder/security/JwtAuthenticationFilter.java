@@ -31,9 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Get Jwt token from Http request
         String token = getAcessTokenFromRequest(request);
-
-        System.out.println("doFilterInternal()");
-
+        
         // Validate token
         if (StringUtils.hasText(token) && jwtTokenProvider.validateAccessToken(token)){
             //Get username from token

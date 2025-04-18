@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {deleteReminder, getAllReminders} from '../services/ReminderService'
 import { useNavigate } from 'react-router'
+
+import { AuthContext } from "../contexts/AuthContext"
+
 
 const ListReminderComponent = () => {
 
     const [reminders, setReminders] = useState([])
     const nav = useNavigate()
+    const { accessToken } = useContext(AuthContext);
 
     useEffect(() => {
-        listReminders()
-    }, [])
+        if (accessToken) {
+          listReminders();
+        }
+      }, [accessToken]);
 
     function listReminders(){
         getAllReminders().then(response => {
