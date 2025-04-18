@@ -8,19 +8,19 @@ const LoginComponent = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const nav = useNavigate()
-    const { setIsAuth } = useContext(AuthContext)
+    const { setAccessToken } = useContext(AuthContext)
     
     async function handleLoginForm(e){
-
         e.preventDefault()
 
-        await loginAPICall(username, password).then(() => {
-            setIsAuth(true)
-            console.log('login');
+        await loginAPICall(username, password).then(response => {
+            const accessToken = response.data.accessToken;
+            setAccessToken(accessToken)
+            console.log(accessToken);
             nav(`/reminders`)
         }).catch(error => {
-            setIsAuth(false)
-            console.error(error)
+            setAccessToken(null);
+            console.error(error);
             console.log('login failed');
         })
     }

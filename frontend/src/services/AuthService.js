@@ -10,28 +10,47 @@ const AUTH_BASE_URL = "http://localhost:8080"
 export const registerAPICall = (registerObj) => axios.post(AUTH_BASE_URL + "/register", registerObj, {withCredentials: false})
 
 export const loginAPICall = (usernameOrEmail, password) => 
-    axios.post(AUTH_BASE_URL + "/login", {usernameOrEmail, password});
+    axios.post(AUTH_BASE_URL + "/login", {usernameOrEmail, password}, {withCredentials: false});
 
-export const checkLoginStatusAPICall = () => axios.get(AUTH_BASE_URL + "/me");
 
+export const fetchMe = () => axios.get(AUTH_BASE_URL + "/me");
+
+// get new access-token using refresh-token
 export const refreshToken = () => {
-    return axios.post(AUTH_BASE_URL + "/refresh-token")
-        .then(() => {
-            console.log("new access token issued");
-        })
-        .catch(error => {
-            console.error("Token refresh failed", error);
-            logout()
-        });
-}
+    console.log("refreshToken()");
+    return axios.post(AUTH_BASE_URL + "/refresh-token", null, { withCredentials: true })
+};
 
-export const logout = () => {
-    const navigate = useNavigate();
-    const { setIsAuth } = useContext(AuthContext);
 
-    setIsAuth(false);
-    navigate('/login');
-}
+// export const retryRequestWithRefreshToken = async (originalRequest) => {
+//   try {
+//       const newAccessToken = await refreshToken();
+//       originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+//       return axios(originalRequest); // 元のリクエストを再試行
+//   } catch (error) {
+//       console.error("リクエストの再試行に失敗しました", error); 
+//       // TODO: この場合、ログイン画面に移動？その際、古いrefresh-token削除すべき？
+//       throw error;
+//   }
+// };
+
+// export const refreshToken = () => {
+//     return axios.post(AUTH_BASE_URL + "/refresh-token")
+//         .then(() => {
+//             console.log("new access token issued");
+//         })
+//         .catch(error => {
+//             console.error("Token refresh failed", error);
+//             logout()
+//         });
+// }
+
+// TODO: logoutの処理を確認
+export const logoutAPICall = () => {
+  return axios.post(AUTH_BASE_URL + "/logout", null, {
+    withCredentials: true, // cookie付きで送信
+  });
+};
 
 // export const storeToken = (token) => localStorage.setItem("token", token)
 

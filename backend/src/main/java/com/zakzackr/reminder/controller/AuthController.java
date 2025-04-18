@@ -11,6 +11,9 @@ import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
+
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -18,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.core.Authentication;
+
 
 
 
@@ -43,24 +47,33 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
         JwtAuthResponse jwtAuthResponse = authService.login(loginDto);
-        
-        // JWTをクッキーで保管
-        Cookie accessTokenCookie = new Cookie("accessToken", jwtAuthResponse.getAccessToken());
-        accessTokenCookie.setHttpOnly(true); // HTTPのみのクッキー
-        accessTokenCookie.setPath("/"); // クッキーのパスを設定
-        accessTokenCookie.setMaxAge(3600); // クッキーの有効期限を設定（an hour）
-        response.addCookie(accessTokenCookie); // レスポンスにクッキーを追加
 
         // Refresh Tokenをクッキーに設定
-        Cookie refreshTokenCookie = new Cookie("refreshToken", jwtAuthResponse.getRefreshToken());
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(2592000); // a month
-        response.addCookie(refreshTokenCookie);
+        Cookie cookie = new Cookie("refreshToken", jwtAuthResponse.getRefreshToken());
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(2592000); // a month
+        response.addCookie(cookie);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        System.out.println("login success!! acess-token and refresh-token has been created");
+
+        return ResponseEntity.ok(Map.of("accessToken", jwtAuthResponse.getAccessToken()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+
+        // cookieを削除して、refresh-tokenを無効にする
+        Cookie clearCookie = new Cookie("refreshToken", null);
+        clearCookie.setHttpOnly(true);
+        clearCookie.setPath("/");
+        clearCookie.setMaxAge(0);
+
+        response.addCookie(clearCookie);
+
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/me")
@@ -76,15 +89,9 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<Void> refreshAccessToken(@RequestBody String refreshToken, HttpServletResponse response) {
+    public ResponseEntity<?> refreshAccessToken(@RequestBody String refreshToken, HttpServletResponse response) {
         try {
             JwtAuthResponse jwtAuthResponse = authService.refreshAccessToken(refreshToken);
-
-            Cookie accessTokenCookie = new Cookie("accessToken", jwtAuthResponse.getAccessToken());
-            accessTokenCookie.setHttpOnly(true); 
-            accessTokenCookie.setPath("/"); 
-            accessTokenCookie.setMaxAge(3600); 
-            response.addCookie(accessTokenCookie); 
 
             Cookie refreshTokenCookie = new Cookie("refreshToken", jwtAuthResponse.getRefreshToken());
             refreshTokenCookie.setHttpOnly(true);
@@ -92,11 +99,10 @@ public class AuthController {
             refreshTokenCookie.setMaxAge(2592000); 
             response.addCookie(refreshTokenCookie);
 
-            System.out.println("new access and refresh token have been created successfully...");
-
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(Map.of("accessToken", jwtAuthResponse.getAccessToken()));
         } catch (JwtException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            System.out.println("refreshAccessToken() failed: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("failed to refresh access token");
         }
     }
 }
