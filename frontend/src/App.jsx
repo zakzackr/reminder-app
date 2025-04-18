@@ -1,8 +1,5 @@
 import './App.css'
 
-import axios from 'axios'
-axios.defaults.withCredentials = true; 
-
 import { useContext } from "react";
 import ListReminderComponent from './components/ListReminderComponent'
 import HeaderComponent from './components/HeaderComponet'
@@ -16,16 +13,16 @@ import { AuthContext, AuthProvider } from './contexts/AuthContext'
 function App() {
 
   function AuthenticatedRoute({children}){
-    const { isAuth } = useContext(AuthContext);
+    const { accessToken } = useContext(AuthContext);
 
-    if (isAuth == null) return null;
-    if (isAuth) return children;
+    if (accessToken == null) return null;
+    if (accessToken) return children;
     return < Navigate to='/' />;
   }
 
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <HeaderComponent />
         <Routes>
           <Route path='/' element = { <LoginComponent /> }></Route>
@@ -48,8 +45,8 @@ function App() {
           <Route path='/login' element = { <LoginComponent /> }></Route>
         </Routes>
         <FooterComponent />
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 

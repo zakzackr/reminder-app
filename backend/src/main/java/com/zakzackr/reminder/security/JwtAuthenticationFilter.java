@@ -32,6 +32,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Get Jwt token from Http request
         String token = getAcessTokenFromRequest(request);
 
+        System.out.println("doFilterInternal()");
+
         // Validate token
         if (StringUtils.hasText(token) && jwtTokenProvider.validateAccessToken(token)){
             //Get username from token
@@ -54,12 +56,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // get JWT token from cookie
     private String getAcessTokenFromRequest(HttpServletRequest request){
 
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if ("accessToken".equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
+        String bearerToken = request.getHeader("authorization");
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
+            return bearerToken.substring(7);
         }
 
         return null;

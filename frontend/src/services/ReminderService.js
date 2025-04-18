@@ -1,7 +1,11 @@
 import axios from "axios";
 
+
+import { useContext } from 'react'
+import { AuthContext } from "../contexts/AuthContext"
+
 const BASE_REST_API_URL = "http://localhost:8080/reminders"
- 
+
 export const getAllReminders= () => axios.get(BASE_REST_API_URL)
 
 export const addReminder = (reminder) => axios.post(BASE_REST_API_URL, reminder)

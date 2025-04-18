@@ -13,6 +13,7 @@ const ListReminderComponent = () => {
 
     function listReminders(){
         getAllReminders().then(response => {
+            console.log("response.data:" + response.data);
             setReminders(response.data)
         }).catch(error => {
             console.error(error)

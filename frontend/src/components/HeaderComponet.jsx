@@ -1,7 +1,7 @@
 import { useEffect, useContext } from 'react'
 import { NavLink, useNavigate } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
-import { logout } from '../services/AuthService'
+import { logoutAPICall } from '../services/AuthService'
 
 const HeaderComponent = () => {
 
@@ -48,7 +48,7 @@ const HeaderComponent = () => {
                         {
                             isAuth && 
                             <li className='nav-item'>
-                                <NavLink to="/login" className="nav-link" onClick={logout}>Logout</NavLink>
+                                <NavLink to="/login" className="nav-link" onClick={logoutAPICall}>Logout</NavLink>
                             </li>
                         }
                     </ul>

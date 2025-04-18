@@ -43,7 +43,6 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/register").permitAll();
                     authorize.requestMatchers("/login").permitAll();
-                    // authorize.requestMatchers("/me").permitAll();
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     authorize.anyRequest().authenticated();
                 });

@@ -79,9 +79,9 @@ public class JwtTokenProvider {
 
             return true;
         } catch (ExpiredJwtException e) {
-            throw new JwtTokenException("Token expired", e);
+            throw new JwtTokenException("access-token expired", e);
         } catch (JwtException e) {
-            throw new JwtTokenException("Invalid token", e);
+            throw new JwtTokenException("Invalid access-token", e);
         }
     }
 
@@ -94,9 +94,9 @@ public class JwtTokenProvider {
 
             return true;
         } catch (ExpiredJwtException e) {
-            throw new JwtTokenException("Token expired", e);
+            throw new JwtTokenException("refresh-token expired", e);
         } catch (JwtException e) {
-            throw new JwtTokenException("Invalid token", e);
+            throw new JwtTokenException("Invalid refresh-token", e);
         }
     }
 

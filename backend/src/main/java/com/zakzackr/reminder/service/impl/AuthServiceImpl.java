@@ -94,7 +94,6 @@ public class AuthServiceImpl implements AuthService {
         // }
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse(accessToken, refreshToken);
-
         return jwtAuthResponse;
     }
 
