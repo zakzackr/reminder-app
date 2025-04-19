@@ -21,12 +21,10 @@ export const AuthProvider = ({ children }) => {
         refreshToken()
             .then(response => {
                 // 新しいアクセストークンをメモリ上に保存
-                console.log("New accessToken set:", response.data.accessToken);
                 setAccessToken(response.data.accessToken);
             })
             .catch(() => {
               setAccessToken(null);
-              console.log('refreshToken() returns an error');
             });  // TODO: 必要に応じてlogin画面に遷移
     }
   }, []);
@@ -36,7 +34,6 @@ export const AuthProvider = ({ children }) => {
     const authInterceptor = axios.interceptors.request.use(
       (config) => {
         if (accessToken) {
-          console.log('Setting Authorization header:', `Bearer ${accessToken}`);
           config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
         return config;

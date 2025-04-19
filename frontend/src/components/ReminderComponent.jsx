@@ -12,7 +12,7 @@ const ReminderComponent = () => {
     const [title, setTitle] = useState('')
     const [note, setNote] = useState('')
     const [date, setDate] = useState()
-    const nav = useNavigate()
+    const navigate = useNavigate()
     const { id } = useParams()
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const ReminderComponent = () => {
 
         if (id){
             updateReminder(id, reminder).then((response) => {
-                nav(`/reminders`)
+                navigate(`/reminders`)
             }).catch(error => {
                 console.error(error)
             })
@@ -45,7 +45,7 @@ const ReminderComponent = () => {
                 console.log(response)
                 console.log(typeof reminder.date)  // : Object
                 console.log(typeof response.data.date) // : String
-                nav(`/reminders`)
+                navigate(`/reminders`)
             }).catch(error => {
                 console.error(error)
             })
@@ -54,70 +54,81 @@ const ReminderComponent = () => {
 
     function pageTitle(){
         if (id){
-            return <h2 className='text-center mt-4'>Edit Reminder</h2>
+            return <h2 style={{ fontWeight: 700, fontSize: "1.5rem", textAlign: "center", margin: "24px 0 18px 0" }}>リマインダー編集</h2>
         } else {
-            return <h2 className='text-center mt-4'>New Reminder</h2>
+            return <h2 style={{ fontWeight: 700, fontSize: "1.5rem", textAlign: "center", margin: "24px 0 18px 0" }}>新規リマインダー</h2>
         }
     }
 
+    function handleCancel(){
+        navigate("/reminders");
+    }
+
     return (
-        <div className='container'>
-            <br /> <br />
-            <div className='row'>
-                <div className='card col-md-6 offset-md-3 offset-md-3'>
-                    { pageTitle() }
-                    <div className='card-body'>
-                        <form>
-                            <div className='form-group mb-2'>
-                                <label className='form-label'>Title:</label>
-                                <input 
-                                    type='text'
-                                    className='form-control'
-                                    placeholder='Enter new title'
-                                    name='title'
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                >
-                                </input>
-                            </div>
-
-                            <div className='form-group mb-2'>
-                                <label className='form-label'>Notes:</label>
-                                <input 
-                                    type='text'
-                                    className='form-control'
-                                    placeholder='Enter notes'
-                                    name='note'
-                                    value={note}
-                                    onChange={(e) => setNote(e.target.value)}
-                                >
-                                </input>
-                            </div>
-
-                            <div className='form-group mb-2'>
-                                <label className='form-label'>Date:</label>
-                                <DateTimePicker 
-                                    className='form-control'
-                                    format='yyyy/MM/dd HH:mm' 
-                                    minDate={new Date()}
-                                    onChange={setDate} 
-                                    value={date}
-                                    disableCalendar={true}
-                                    disableClock={true}
-                                    // hourPlaceholder='hh'
-                                    // minutePlaceholder='mm'
-                                    // yearPlaceholder='yyyy'
-                                    // monthPlaceholder='mm'
-                                    // dayPlaceholder='dd'
-                                    />
-                            </div>
-
-                            <button className='btn btn-success' onClick={(e) => saveOrUpdateReminder(e)}>Submit</button>
-                        </form>
-                    </div>
+        <div className="container" style={{ maxWidth: 480, margin: "48px auto" }}>
+            <div className="card" style={{ margin: "0 auto", padding: 0 }}>
+                {pageTitle()}
+                <p style={{ fontSize: '0.8rem',  textAlign: "center" }}>*現在は、毎週月曜日の8AMのみ設定可能です。</p>
+                <div className="card-body" style={{ paddingTop: 16 }}>
+                    <form>
+                        <div style={{ marginBottom: 18 }}>
+                            <label style={{ display: "block", fontWeight: 600, marginBottom: 6, fontSize: "1rem" }}>
+                                タイトル
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="タイトルを入力"
+                                name="title"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                            />
+                        </div>
+                        <div style={{ marginBottom: 18 }}>
+                            <label style={{ display: "block", fontWeight: 600, marginBottom: 6, fontSize: "1rem" }}>
+                                メモ
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="メモを入力"
+                                name="note"
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                            />
+                        </div>
+                        <div style={{ marginBottom: 18 }}>
+                            <label style={{ display: "block", fontWeight: 600, marginBottom: 6, fontSize: "1rem" }}>
+                                日時
+                            </label> 
+                            <DateTimePicker
+                                className="form-control"
+                                format="yyyy/MM/dd HH:mm"
+                                minDate={new Date()}
+                                onChange={(selectedDate) => {
+                                    const fixedTimeDate = new Date(selectedDate);
+                                    fixedTimeDate.setHours(8, 0, 0, 0);
+                                    setDate(fixedTimeDate);
+                                }}
+                                value={date}
+                                disableClock={true}
+                                tileDisabled={({ date }) => date.getDay() !== 1}
+                                disableCalendar={false}
+                                hourPlaceholder="08"
+                                minutePlaceholder="00"
+                                clearIcon={null}
+                                readOnly={true}  
+                            />
+                        </div>
+                        <div style={{ display: "flex", justifyContent: "space-between", width: "100%"  }}>
+                            <button className="btn" style={{ width: "18%" }} onClick={handleCancel}>
+                                Cancel
+                            </button>
+                            <button className="btn" style={{ width: "18%" }} onClick={(e) => saveOrUpdateReminder(e)}>
+                                Done
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            
         </div>
     )
 }
