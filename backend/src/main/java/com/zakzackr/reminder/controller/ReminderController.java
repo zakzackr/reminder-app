@@ -38,7 +38,6 @@ public class ReminderController {
         Long userId = userDetails.getUserId();
         List<ReminderDto> reminderDtos = reminderService.getAllReminders(userId);
 
-        System.out.println("get allremidners");
         return ResponseEntity.ok(reminderDtos);
     }
 

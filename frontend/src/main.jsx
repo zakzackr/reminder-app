@@ -5,7 +5,8 @@ import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  // TODO: 本番環境では<React.StrictMode>を使用
+  // <React.StrictMode>
     <App />
-  </React.StrictMode>
+  // </React.StrictMode>
 )

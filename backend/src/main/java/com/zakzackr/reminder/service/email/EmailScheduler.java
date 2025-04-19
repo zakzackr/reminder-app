@@ -20,8 +20,9 @@ public class EmailScheduler {
     private ReminderRepository reminderRepository;
     private EmailSenderService senderService;
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 8 ? * MON", zone = "Asia/Tokyo") // at 8am JST
     public void checkAndSendScheduledEmails(){
+        System.out.println("checking if reminder tasks to be sent exits");
         // make second/nanosecond zero
         ZonedDateTime current = ZonedDateTime.now(ZoneId.of("UTC")).truncatedTo(ChronoUnit.MINUTES);
         Optional<List<Reminder>> reminderOptional = reminderRepository.findByDate(current);
