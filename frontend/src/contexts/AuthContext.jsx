@@ -2,7 +2,7 @@ import axios from "axios";
 
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchMe, refreshToken } from "../services/AuthService";
+import { logoutAPICall, refreshToken } from "../services/AuthService";
 
 export const AuthContext = createContext({
   isAuth: false,
@@ -47,7 +47,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const authInterceptor = axios.interceptors.request.use(
       (config) => {
+        console.log('access-token will set!!');
         if (accessToken) {
+          console.log('access-token is set!!:' + accessToken);
           config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
         return config;
@@ -69,7 +71,7 @@ export const AuthProvider = ({ children }) => {
       async (error) => {
         const originalRequest = error.config;
         // TODO: server側でinvalid refresh-tokenのresponse.status.codeを考える。401 or 403??
-        if (error.response.status === 401 && !originalRequest._retry) {
+        if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url.includes("/refresh-token") ) {
           originalRequest._retry = true;
           try {
             console.log('loop');
@@ -79,8 +81,9 @@ export const AuthProvider = ({ children }) => {
             return axios(originalRequest);
           } catch {
             // TODO: logout()を使って、logoutしてaccess-tokenをnull, refresh-tokenをinvalidにする
-            console.log("logout");
-            logout();
+            // console.log("logout");
+            // logout();
+            navigate("/login");
           }
         }
         return Promise.reject(error);

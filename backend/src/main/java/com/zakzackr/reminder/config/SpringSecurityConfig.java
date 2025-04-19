@@ -43,9 +43,13 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/register").permitAll();
                     authorize.requestMatchers("/login").permitAll();
+                    authorize.requestMatchers("/refresh-token").permitAll(); 
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     authorize.anyRequest().authenticated();
                 });
+
+        // Spring securityのdefaultのlogout機能を無効にして、controllerで受け取る。
+        http.logout(logout -> logout.disable());
 
         http.exceptionHandling(exception -> exception
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint));

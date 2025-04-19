@@ -101,6 +101,7 @@ public class AuthServiceImpl implements AuthService {
     public JwtAuthResponse refreshAccessToken(String refreshToken){
         jwtTokenProvider.validateRefreshToken(refreshToken);
 
+        // TODO: JWT内でusernameしか使わないから、authentication obj.生成する必要ないかも
         String username = jwtTokenProvider.getUsernameFromToken(refreshToken);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 

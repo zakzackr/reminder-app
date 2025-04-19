@@ -6,7 +6,7 @@ import { logoutAPICall } from '../services/AuthService'
 const HeaderComponent = () => {
 
     // const nav = useNavigate()
-    const { isAuth, setIsAuth } = useContext(AuthContext);
+    const { accessToken } = useContext(AuthContext);
 
     // function handleLogout(){
     //     setIsAuth(false)
@@ -25,7 +25,7 @@ const HeaderComponent = () => {
                     <div className='collapse navbar-collapse'>
                         <ul className='navbar-nav'>
                             {
-                                isAuth && 
+                                accessToken && 
                                 <li className='nav-item'>
                                     <NavLink to={`/reminders`}  className="nav-link">My Lists</NavLink>
                                 </li>
@@ -34,21 +34,21 @@ const HeaderComponent = () => {
                     </div>
                     <ul className='navbar-nav'>
                         {
-                            !isAuth && 
+                            !accessToken && 
                             <li className='nav-item'>
                                 <NavLink to="/register" className="nav-link">Register</NavLink>
                             </li>
                         }
                         {
-                            !isAuth && 
+                            !accessToken && 
                             <li className='nav-item'>
                                 <NavLink to="/login" className="nav-link">Login</NavLink>
                             </li>
                         }
                         {
-                            isAuth && 
+                            accessToken && 
                             <li className='nav-item'>
-                                <NavLink to="/login" className="nav-link" onClick={logoutAPICall}>Logout</NavLink>
+                                <button className="nav-link" onClick={logoutAPICall}>Logout</button>
                             </li>
                         }
                     </ul>
