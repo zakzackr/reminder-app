@@ -20,47 +20,32 @@ const HeaderComponent = () => {
       };
 
     return (
-        <div> 
-            <header>
-                <nav className='navbar navbar-expand-md navbar-dark bg-dark'>
-                    <div>
-                        <a href='/' className='navbar-brand' style={{ paddingLeft: '10px' }}>
-                            Reminders
-                        </a>
-                    </div>
-                    <div className='collapse navbar-collapse'>
-                        <ul className='navbar-nav'>
-                            {
-                                accessToken && 
-                                <li className='nav-item'>
-                                    <NavLink to={`/reminders`}  className="nav-link">My Lists</NavLink>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                    <ul className='navbar-nav'>
-                        {
-                            !accessToken && 
-                            <li className='nav-item'>
-                                <NavLink to="/register" className="nav-link">Register</NavLink>
-                            </li>
-                        }
-                        {
-                            !accessToken && 
-                            <li className='nav-item'>
-                                <NavLink to="/login" className="nav-link">Login</NavLink>
-                            </li>
-                        }
-                        {
-                            accessToken && 
-                            <li className='nav-item'>
-                                <button className="nav-link" onClick={logout}>Logout</button>
-                            </li>
-                        }
-                    </ul>
-                </nav>
-            </header>
-        </div>
+        <header>
+            <nav className="navbar" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", minHeight: 60 }}>
+                <div>
+                    <a href="/" className="navbar-brand" style={{ paddingLeft: 0 }}>
+                        Reminders
+                    </a>
+                </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    {!accessToken && (
+                        <NavLink to="/register" className="nav-link" style={{ marginRight: 8 }}>
+                            Register
+                        </NavLink>
+                    )}
+                    {!accessToken && (
+                        <NavLink to="/login" className="nav-link" style={{ marginRight: 8 }}>
+                            Login
+                        </NavLink>
+                    )}
+                    {accessToken && (
+                        <button className="nav-link" style={{ background: "none", border: "none", color: "#222", cursor: "pointer", fontWeight: 500, padding: "8px 12px" }} onClick={logout}>
+                            Logout
+                        </button>
+                    )}
+                </div>
+            </nav>
+        </header>
     )
 }
 

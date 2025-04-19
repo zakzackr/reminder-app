@@ -12,23 +12,17 @@ const ListReminderComponent = () => {
     const { accessToken } = useContext(AuthContext);
 
     useEffect(() => {
-        console.log("checking if accesstoken exists in listReminderComponent (useEffect): " + accessToken);
         if (accessToken) {
-            console.log("listReminders()");
           listReminders();
         }
       }, [accessToken]);
 
     function listReminders(){
         getAllReminders().then(response => {
-            console.log("getAllReminders() success");
             setReminders(response.data)
         }).catch(error => {
-            console.log("getAllReminders() is returing an error");
             console.error(error)
         })
-
-        console.log("inside listReminders()");
     }
 
     function addNewReminder(){
@@ -65,33 +59,32 @@ const ListReminderComponent = () => {
 
     return (
         <div className='container'>
-            <h2 className='text-center mt-2'>List</h2>
-            <button className='btn btn-primary mb-2' onClick={() => addNewReminder()}>New Reminder</button>
-
+            <h2 style={{ fontWeight: 700, fontSize: "1.5rem", textAlign: "center", margin: "24px 0 18px 0" }}>Reminder List</h2>
+            <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 18 }}>
+                <button className="btn" onClick={() => addNewReminder()}>＋ 新規リマインダー</button>
+            </div>
             <div>
-                <table className='table table-bordered table-striped'>
+                <table className="table">
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Notes</th>
-                            <th>Date</th>
-                            <th>Actions</th>
+                            <th>タイトル</th>
+                            <th>メモ</th>
+                            <th>日時</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {
-                            reminders.map(reminder => 
-                                <tr key={reminder.id}>
-                                    <td>{reminder.title}</td>
-                                    <td>{reminder.note}</td>
-                                    <td>{dateTimeConverter(reminder.date)}</td>
-                                    <td>
-                                        <button className='btn btn-info' onClick={() => updateReminder(reminder.id)} style={ { marginRight:'10px' }} >Update</button>
-                                        <button className='btn btn-danger' onClick={() => removeReminder(reminder.id)} style={ { marginRight:'10px' }}>Delete</button>
-                                    </td>
-                                </tr>
-                            )
-                        }
+                        {reminders.map(reminder => 
+                            <tr key={reminder.id}>
+                                <td data-label="タイトル">{reminder.title}</td>
+                                <td data-label="メモ">{reminder.note}</td>
+                                <td data-label="日時">{dateTimeConverter(reminder.date)}</td>
+                                <td data-label="操作">
+                                    <button className="btn btn-info" onClick={() => updateReminder(reminder.id)} style={{ marginRight: 6 }}>編集</button>
+                                    <button className="btn btn-danger" onClick={() => removeReminder(reminder.id)}>削除</button>
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
