@@ -6,7 +6,10 @@ import { AuthContext } from "../contexts/AuthContext"
 
 const BASE_REST_API_URL = "http://localhost:8080/reminders"
 
-export const getAllReminders= () => axios.get(BASE_REST_API_URL)
+export const getAllReminders= () => {
+    console.log("getAllRemindersAPICall()");
+    return axios.get(BASE_REST_API_URL);
+}
 
 export const addReminder = (reminder) => axios.post(BASE_REST_API_URL, reminder)
 

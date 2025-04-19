@@ -44,7 +44,7 @@ function App() {
           <Route path='/register' element = { <RegisterComponent /> }></Route>
           <Route path='/login' element = { <LoginComponent /> }></Route>
         </Routes>
-        <FooterComponent />
+        {/* <FooterComponent /> */}
       </AuthProvider>
     </BrowserRouter>
   )

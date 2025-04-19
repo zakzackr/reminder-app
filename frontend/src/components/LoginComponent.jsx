@@ -1,14 +1,30 @@
-import { useState, useContext } from "react"
-import { loginAPICall } from "../services/AuthService"
-import { useNavigate } from "react-router-dom"
+import { useState, useContext, useEffect } from "react"
+import { loginAPICall, refreshToken } from "../services/AuthService"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
 
 const LoginComponent = () => {
     
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const nav = useNavigate()
+    const navigate = useNavigate()
+    const [searchParams] = useSearchParams();
+    const loggedOut = searchParams.get("logout") === "true";
     const { setAccessToken } = useContext(AuthContext)
+
+    useEffect(() => {
+        if (loggedOut) return; // ログアウト後はrefreshToken()を呼ばない
+        
+        refreshToken()
+            .then((response) => {
+                // ログイン画面表示時にrefresh-tokenを持つユーザーに対しては、自動ログイン
+                setAccessToken(response.data.accessToken);
+                setTimeout(() => navigate("/reminders"), 0);
+            })
+            .catch(() => {
+                // refresh-token が無効なので、ログインフォームを表示
+            });
+      }, []);
     
     async function handleLoginForm(e){
         e.preventDefault()
@@ -16,8 +32,7 @@ const LoginComponent = () => {
         await loginAPICall(username, password).then(response => {
             const accessToken = response.data.accessToken;
             setAccessToken(accessToken)
-            console.log(accessToken);
-            nav(`/reminders`)
+            setTimeout(() => navigate("/reminders"), 0);
         }).catch(error => {
             setAccessToken(null);
             console.error(error);

@@ -5,13 +5,19 @@ import { logoutAPICall } from '../services/AuthService'
 
 const HeaderComponent = () => {
 
-    // const nav = useNavigate()
-    const { accessToken } = useContext(AuthContext);
+    const navigate = useNavigate()
+    const { accessToken, setAccessToken } = useContext(AuthContext);
 
-    // function handleLogout(){
-    //     setIsAuth(false)
-    //     nav('/login')
-    // }
+    const logout = async () => {
+        try {
+          await logoutAPICall(); 
+        } catch (error) {
+          console.error("Logout API failed", error);
+        } finally {
+          setAccessToken(null);
+          navigate("/login?logout=true");
+        }
+      };
 
     return (
         <div> 
@@ -48,7 +54,7 @@ const HeaderComponent = () => {
                         {
                             accessToken && 
                             <li className='nav-item'>
-                                <button className="nav-link" onClick={logoutAPICall}>Logout</button>
+                                <button className="nav-link" onClick={logout}>Logout</button>
                             </li>
                         }
                     </ul>

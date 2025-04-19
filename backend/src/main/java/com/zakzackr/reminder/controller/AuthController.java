@@ -115,14 +115,14 @@ public class AuthController {
                 .secure(false) // ← 本番は true。
                 .build();
 
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
 
             return ResponseEntity.ok(Map.of("accessToken", jwtAuthResponse.getAccessToken()));
         } catch (JwtException e) {
             System.out.println("refreshAccessToken() failed: " + e.getMessage());
 
-             // 無効なrefresh-tokenを削除する
-             ResponseCookie clearCookie = ResponseCookie.from("refreshToken", "")
+            // 無効なrefresh-tokenを削除する
+            ResponseCookie clearCookie = ResponseCookie.from("refreshToken", "")
              .httpOnly(true)
              .path("/")
              .maxAge(0)              // 有効期限0 → 削除
@@ -130,7 +130,7 @@ public class AuthController {
              .secure(false)          // 本番なら true に
              .build();
          
-         response.addHeader(HttpHeaders.SET_COOKIE, clearCookie.toString());
+            response.addHeader(HttpHeaders.SET_COOKIE, clearCookie.toString());
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("failed to refresh access token");
         }

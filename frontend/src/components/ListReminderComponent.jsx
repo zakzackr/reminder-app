@@ -12,18 +12,23 @@ const ListReminderComponent = () => {
     const { accessToken } = useContext(AuthContext);
 
     useEffect(() => {
+        console.log("checking if accesstoken exists in listReminderComponent (useEffect): " + accessToken);
         if (accessToken) {
+            console.log("listReminders()");
           listReminders();
         }
       }, [accessToken]);
 
     function listReminders(){
         getAllReminders().then(response => {
-            console.log("response.data:" + response.data);
+            console.log("getAllReminders() success");
             setReminders(response.data)
         }).catch(error => {
+            console.log("getAllReminders() is returing an error");
             console.error(error)
         })
+
+        console.log("inside listReminders()");
     }
 
     function addNewReminder(){
