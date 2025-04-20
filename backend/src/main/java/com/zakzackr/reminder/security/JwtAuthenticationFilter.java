@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.zakzackr.reminder.exception.JwtTokenException;
+
 import java.io.IOException;
 
 @AllArgsConstructor
@@ -32,23 +34,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Get Jwt token from Http request
         String token = getAcessTokenFromRequest(request);
         
-        // Validate token
-        if (StringUtils.hasText(token) && jwtTokenProvider.validateAccessToken(token)){
-            //Get username from token
-            String username = jwtTokenProvider.getUsernameFromToken(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        try {
+            // Validate token
+            if (StringUtils.hasText(token) && jwtTokenProvider.validateAccessToken(token)){
+                //Get username from token
+                String username = jwtTokenProvider.getUsernameFromToken(token);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities()
-            );
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
 
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+
+            filterChain.doFilter(request, response);
+        } catch (JwtTokenException e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\": \"" + e.getMessage() + "\"}");
         }
-
-        filterChain.doFilter(request, response);
     }
 
     // get JWT token from cookie
