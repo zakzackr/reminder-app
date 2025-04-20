@@ -9,7 +9,12 @@ import lombok.Setter;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "reminders")
+@Table(
+    name = "reminders",
+    indexes = {
+        @Index(name = "idx_user_id", columnList = "user_id") 
+    }
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
