@@ -41,9 +41,9 @@ public class SpringSecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/register").permitAll();
-                    authorize.requestMatchers("/login").permitAll();
-                    authorize.requestMatchers("/refresh-token").permitAll(); 
+                    authorize.requestMatchers("/api/auth/register").permitAll();
+                    authorize.requestMatchers("/api/auth/login").permitAll();
+                    authorize.requestMatchers("/api/auth/refresh-token").permitAll(); 
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     authorize.anyRequest().authenticated();
                 });

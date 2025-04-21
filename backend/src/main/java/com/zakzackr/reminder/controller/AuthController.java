@@ -56,9 +56,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
-        System.out.println("before login service");
         JwtAuthResponse jwtAuthResponse = authService.login(loginDto);
-        System.out.println("after login service");
 
         // Refresh Token をクッキーに設定（SameSite=None 明示）
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", jwtAuthResponse.getRefreshToken())
