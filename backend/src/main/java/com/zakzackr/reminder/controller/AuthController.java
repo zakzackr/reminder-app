@@ -9,10 +9,10 @@ import com.zakzackr.reminder.service.email.EmailSenderService;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Cookie;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -23,17 +23,24 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.core.Authentication;
 
-
-
-
-
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
-@AllArgsConstructor
+@RequestMapping("/api/auth")
 public class AuthController {
 
-    private AuthService authService;
-    private EmailSenderService senderService;
+    private final AuthService authService;
+    private final EmailSenderService senderService;
+
+    @Value("${cookie.same-site:Lax}") 
+    private String sameSite;
+
+    @Value("${cookie.secure:false}")
+    private boolean secure;
+
+    public AuthController(AuthService authService, EmailSenderService senderService) {
+        this.authService = authService;
+        this.senderService = senderService;
+    }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto){
@@ -49,15 +56,17 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginDto loginDto, HttpServletResponse response) {
+        System.out.println("before login service");
         JwtAuthResponse jwtAuthResponse = authService.login(loginDto);
+        System.out.println("after login service");
 
         // Refresh Token をクッキーに設定（SameSite=None 明示）
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", jwtAuthResponse.getRefreshToken())
             .httpOnly(true)
             .path("/")
             .maxAge(2592000)
-            .sameSite("Lax")
-            .secure(false) // ← 本番は true。
+            .sameSite(sameSite)
+            .secure(secure) 
             .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
@@ -71,12 +80,15 @@ public class AuthController {
     public ResponseEntity<Void> logout(HttpServletResponse response) {
 
         // cookieを削除して、refresh-tokenを無効にする
-        Cookie clearCookie = new Cookie("refreshToken", null);
-        clearCookie.setHttpOnly(true);
-        clearCookie.setPath("/");
-        clearCookie.setMaxAge(0);
+        ResponseCookie clearCookie = ResponseCookie.from("refreshToken", "")
+            .httpOnly(true)
+            .path("/")
+            .maxAge(0) // 有効期限0 = 削除
+            .sameSite(sameSite)
+            .secure(secure) 
+            .build();
 
-        response.addCookie(clearCookie);
+        response.addHeader(HttpHeaders.SET_COOKIE, clearCookie.toString());
 
         System.out.println("logout()");
 
@@ -111,8 +123,8 @@ public class AuthController {
                 .httpOnly(true)
                 .path("/")
                 .maxAge(2592000)
-                .sameSite("Lax")
-                .secure(false) // ← 本番は true。
+                .sameSite(sameSite)
+                .secure(secure) 
                 .build();
 
             response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
@@ -123,12 +135,12 @@ public class AuthController {
 
             // 無効なrefresh-tokenを削除する
             ResponseCookie clearCookie = ResponseCookie.from("refreshToken", "")
-             .httpOnly(true)
-             .path("/")
-             .maxAge(0)              // 有効期限0 → 削除
-             .sameSite("Lax")        // 必要に応じて "None" に（Setしていた属性に合わせて）
-             .secure(false)          // 本番なら true に
-             .build();
+                .httpOnly(true)
+                .path("/")
+                .maxAge(0)  // 有効期限0 → 削除
+                .sameSite(sameSite)        
+                .secure(secure) 
+                .build();
          
             response.addHeader(HttpHeaders.SET_COOKIE, clearCookie.toString());
 

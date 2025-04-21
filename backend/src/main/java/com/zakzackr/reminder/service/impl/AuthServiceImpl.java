@@ -11,8 +11,6 @@ import com.zakzackr.reminder.repository.UserRepository;
 import com.zakzackr.reminder.security.JwtTokenProvider;
 import com.zakzackr.reminder.service.AuthService;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;

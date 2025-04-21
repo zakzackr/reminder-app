@@ -15,8 +15,10 @@ import com.zakzackr.reminder.security.CustomUserDetails;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+// @CrossOrigin(origins = "https://shibainuu.com", allowCredentials = "true")
+
 @RestController
-@RequestMapping("reminders")
+@RequestMapping("/api/reminders")
 @AllArgsConstructor
 public class ReminderController {
 
