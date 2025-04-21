@@ -26,12 +26,12 @@ const ListReminderComponent = () => {
     }
 
     function addNewReminder(){
-        nav(`/add-reminder`)
+        nav(`/reminders/new`)
     }
 
     // id: reminderId
     function updateReminder(id){
-        nav(`/update-reminder/${id}`)
+        nav(`/reminders/${id}/edit`)
     }
 
     function removeReminder(id){

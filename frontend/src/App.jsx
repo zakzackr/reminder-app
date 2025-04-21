@@ -26,12 +26,12 @@ function App() {
         <HeaderComponent />
         <Routes>
           <Route path='/' element = { <LoginComponent /> }></Route>
-          <Route path='/add-reminder' element = { 
+          <Route path='/reminders/new' element = { 
             <AuthenticatedRoute>
               <ReminderComponent /> 
             </AuthenticatedRoute>
           }></Route>
-          <Route path='/update-reminder/:id' element = { 
+          <Route path='/reminders/:id/edit' element = { 
             <AuthenticatedRoute>
               <ReminderComponent /> 
             </AuthenticatedRoute>
