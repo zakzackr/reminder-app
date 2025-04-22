@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       async (error) => {
         const originalRequest = error.config;
         // TODO: server側でinvalid refresh-tokenのresponse.status.codeを考える。401 or 403??
-        if (error.response.status === 401 && !originalRequest._retry 
+        if (error.response?.status === 401 && !originalRequest._retry 
           && !originalRequest.url.includes("/refresh-token") && !originalRequest.url.includes("/logout")
         ) {
           originalRequest._retry = true;

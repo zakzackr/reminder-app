@@ -18,9 +18,14 @@ import com.zakzackr.reminder.exception.JwtTokenException;
 
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @AllArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private JwtTokenProvider jwtTokenProvider;
     private UserDetailsService userDetailsService;
@@ -32,10 +37,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Get Jwt token from Http request
         String token = getAcessTokenFromRequest(request);
+        String url = request.getRequestURI();
+        logger.info("Request URL: " + url);
+
+        if (url.equals("/healthcheck")) {
+            logger.info("url equals /healthcheck, before doFilter");
+            filterChain.doFilter(request, response);
+            logger.info("url equals /healthcheck, after doFilter");
+            return;
+        }
         
         try {
+            logger.info("before token validation: " + url);
             // Validate token
             if (StringUtils.hasText(token) && jwtTokenProvider.validateAccessToken(token)){
+                logger.info("inside token validation if: " + url);
                 //Get username from token
                 String username = jwtTokenProvider.getUsernameFromToken(token);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -49,9 +65,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-            
+            logger.info("before doFilter(): " + url);
             filterChain.doFilter(request, response);
+            logger.info("after doFilter(): " + url);
+
         } catch (JwtTokenException e) {
+            logger.info("JwtTokenExeption: " + url);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"message\": \"" + e.getMessage() + "\"}");

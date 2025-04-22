@@ -30,16 +30,17 @@ public class AuthController {
 
     private final AuthService authService;
     private final EmailSenderService senderService;
+    private final String sameSite;
+    private final boolean secure;
 
-    @Value("${cookie.same-site:Lax}") 
-    private String sameSite;
-
-    @Value("${cookie.secure:false}")
-    private boolean secure;
-
-    public AuthController(AuthService authService, EmailSenderService senderService) {
+    public AuthController(AuthService authService, 
+                          EmailSenderService senderService,
+                          @Value("${cookie.same-site:Lax}") String sameSite,
+                          @Value("${cookie.secure:false}") boolean secure) {
         this.authService = authService;
         this.senderService = senderService;
+        this.sameSite = sameSite;
+        this.secure = secure;
     }
 
     @PostMapping("/register")
