@@ -18,6 +18,8 @@ import com.zakzackr.reminder.exception.JwtTokenException;
 
 import java.io.IOException;
 
+import jakarta.servlet.http.Cookie;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String url = request.getRequestURI();
         logger.info("Request URL: " + url);
 
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            logger.info("[Cookies from Browser]");
+            for (Cookie cookie : cookies) {
+                logger.info(cookie.getName() + " = " + cookie.getValue());
+            }
+        } else {
+            logger.info("[Cookies from Browser] No cookies found.");
+        }
+        
         if (url.equals("/healthcheck")) {
             logger.info("url equals /healthcheck, before doFilter");
             filterChain.doFilter(request, response);

@@ -4,7 +4,7 @@ import axios from "axios";
 import { useContext } from 'react'
 import { AuthContext } from "../contexts/AuthContext"
 
-const BASE_REST_API_URL = `${import.meta.env.VITE_BASE_URL}/api/reminders`
+const BASE_REST_API_URL = `${import.meta.env.VITE_BASE_URL}/reminders`
 
 export const getAllReminders= () => {
     console.log("getAllRemindersAPICall()");

@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -44,11 +45,20 @@ public class SpringSecurityConfig {
 
         http
             .cors(Customizer.withDefaults())
-            .csrf((csrf) -> csrf.disable())
+            .csrf(csrf -> csrf
+                .csrfTokenRepository(new CookieCsrfTokenRepository())
+                .ignoringRequestMatchers(
+                    "/auth/login",
+                    "/auth/register",
+                    "/auth/logout",
+                    "/reminders/**",
+                    "/healthcheck"
+                )
+            )
             .authorizeHttpRequests(authorize -> {
                 authorize.requestMatchers("/auth/register").permitAll();
                 authorize.requestMatchers("/auth/login").permitAll();
-                authorize.requestMatchers("/auth/refresh-token").permitAll(); 
+                authorize.requestMatchers("/auth/token").permitAll(); 
                 authorize.requestMatchers("/healthcheck").permitAll(); 
                 authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                 authorize.anyRequest().authenticated();
