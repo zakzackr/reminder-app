@@ -24,8 +24,15 @@ public class ReminderServiceImpl implements ReminderService {
 
     @Override
     public ReminderDto getReminder(Long userId, Long reminderId) {
+        System.out.println("usreID: " + userId + ", reminderID: " + reminderId);
         Reminder reminder = reminderRepository.findByIdAndUserId(reminderId, userId)
-                .orElseThrow(() -> new ResourceNotFoundException("The resource does not exist."));
+                .orElseThrow(() -> {
+                    System.out.println("ResourceNotFoundException");
+                    return new ResourceNotFoundException("The resource does not exist.");
+                });
+
+        System.out.println("before return statement of getReminder()");
+
 
         return modelMapper.map(reminder, ReminderDto.class);
     }
