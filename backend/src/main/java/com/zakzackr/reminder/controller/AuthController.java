@@ -26,10 +26,16 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.core.Authentication;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
 
     private final AuthService authService;
     private final EmailSenderService senderService;
@@ -112,13 +118,20 @@ public class AuthController {
     @PostMapping("/token")
     public ResponseEntity<?> refreshAccessToken(@CookieValue(required = false) String refreshToken, HttpServletResponse response) {
         System.out.println("refresh-token: " + refreshToken);
+        logger.info("[/auth/token] called");
+
         if (refreshToken == null || refreshToken.trim().isEmpty()) {
             // Cookieが無い、または空 
+            logger.info("Refresh token is missing");
+
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token is missing");
         }
         
         try {
+            logger.info("before refreshAccessToken");
             JwtAuthResponse jwtAuthResponse = authService.refreshAccessToken(refreshToken);
+            logger.info("after refreshAccessToken");
+
 
             ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", jwtAuthResponse.getRefreshToken())
                 .httpOnly(true)
@@ -130,9 +143,14 @@ public class AuthController {
 
             response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
 
+            logger.info("success");
+
+
             return ResponseEntity.ok(Map.of("accessToken", jwtAuthResponse.getAccessToken()));
         } catch (JwtException e) {
             System.out.println("refreshAccessToken() failed: " + e.getMessage());
+            logger.info("refreshAccessToken() failed: " + e.getMessage());
+
 
             // 無効なrefresh-tokenを削除する
             ResponseCookie clearCookie = ResponseCookie.from("refreshToken", "")

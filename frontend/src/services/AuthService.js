@@ -18,13 +18,48 @@ export const loginAPICall = (usernameOrEmail, password) => {
 export const fetchMe = () => axios.get(AUTH_BASE_URL + "/me");
 
 // get new access-token using refresh-token
+// export const refreshToken = () => {
+//   console.log("refreshTokenAPICall()");
+
+//   const csrfToken = getCookie('XSRF-TOKEN');  // CookieからXSRF-TOKENを取得
+//   console.log("取得したCSRFトークン:", csrfToken);
+
+//   return axios.post(
+//       AUTH_BASE_URL + "/token",
+//       null,
+//       {
+//           withCredentials: true,
+//           headers: {
+//               'X-XSRF-TOKEN': csrfToken    // csrfTokenをヘッダーにセット
+//           }
+//       }
+//   );
+// };
+
 export const refreshToken = () => {
-    console.log("refreshTokenAPICall()");
-    return axios.post(AUTH_BASE_URL + "/token", null, { withCredentials: true })
+  const csrfToken = getCookie('XSRF-TOKEN');
+
+  return axios.post(
+    AUTH_BASE_URL + "/token",
+    JSON.stringify({}),   // ←ここを`JSON.stringify({})`にする
+    {
+      withCredentials: true,
+      headers: {
+        'X-XSRF-TOKEN': csrfToken,
+        'Content-Type': 'application/json' // ←ここもちゃんと指定
+      }
+    }
+  );
 };
+
 
 // TODO: logoutの処理を確認
 export const logoutAPICall = () => axios.post(AUTH_BASE_URL + "/logout", null, {withCredentials: true});
+
+const getCookie = (name) => {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : null;
+};
 
 
 // export const retryRequestWithRefreshToken = async (originalRequest) => {

@@ -102,10 +102,10 @@ public class SpringSecurityConfig {
         return source;
     }
 
-    @Bean
-    public CorsFilter corsFilter() {
-        return new CorsFilter(corsConfigurationSource()); // ← 今作った corsConfigurationSource() をここで使う！
-    }
+    // @Bean
+    // public CorsFilter corsFilter() {
+    //     return new CorsFilter(corsConfigurationSource()); // 
+    // }
 
     // no need to explicitly provide userDetailsService instance to this authenticationManager method,
     // as spring sec. automatically calls userDetailsService.loadByUsername method when userDetailsService is injected in SpringSecurityConfig class.
