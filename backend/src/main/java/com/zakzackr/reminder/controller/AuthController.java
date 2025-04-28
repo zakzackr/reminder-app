@@ -3,6 +3,7 @@ package com.zakzackr.reminder.controller;
 import com.zakzackr.reminder.dto.JwtAuthResponse;
 import com.zakzackr.reminder.dto.LoginDto;
 import com.zakzackr.reminder.dto.RegisterDto;
+import com.zakzackr.reminder.security.JwtAuthenticationFilter;
 import com.zakzackr.reminder.service.AuthService;
 import com.zakzackr.reminder.service.email.EmailSenderService;
 
@@ -12,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -108,7 +111,6 @@ public class AuthController {
 
     @PostMapping("/token")
     public ResponseEntity<?> refreshAccessToken(@CookieValue(required = false) String refreshToken, HttpServletResponse response) {
-        
         System.out.println("refresh-token: " + refreshToken);
         if (refreshToken == null || refreshToken.trim().isEmpty()) {
             // Cookieが無い、または空 

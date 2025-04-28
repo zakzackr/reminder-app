@@ -21,6 +21,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.security.config.Customizer;
 
 
@@ -43,10 +44,18 @@ public class SpringSecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        CookieCsrfTokenRepository csrfTokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        csrfTokenRepository.setCookieCustomizer(cookie -> cookie
+                .domain("shibainuu.com")  // frontのJSでCookieを読めるように、domainを指定。サブドメインのapi.shibainuu.comにもリクエスト時にcookie付与される。
+                .path("/")
+                .secure(true)
+                .sameSite("None")
+        );
+
         http
             .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf
-                .csrfTokenRepository(new CookieCsrfTokenRepository())
+                .csrfTokenRepository(csrfTokenRepository)
                 .ignoringRequestMatchers(
                     "/auth/login",
                     "/auth/register",
@@ -85,12 +94,17 @@ public class SpringSecurityConfig {
             "https://shibainuu.com"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-XSRF-TOKEN"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        return new CorsFilter(corsConfigurationSource()); // ← 今作った corsConfigurationSource() をここで使う！
     }
 
     // no need to explicitly provide userDetailsService instance to this authenticationManager method,
