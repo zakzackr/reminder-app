@@ -20,7 +20,7 @@ export const fetchMe = () => axios.get(AUTH_BASE_URL + "/me");
 // get new access-token using refresh-token
 export const refreshToken = () => {
     console.log("refreshTokenAPICall()");
-    return axios.post(AUTH_BASE_URL + "/refresh-token", null, { withCredentials: true })
+    return axios.post(AUTH_BASE_URL + "/token", null, { withCredentials: true })
 };
 
 // TODO: logoutの処理を確認

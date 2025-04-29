@@ -48,7 +48,7 @@ public class SpringSecurityConfig {
             .authorizeHttpRequests(authorize -> {
                 authorize.requestMatchers("/auth/register").permitAll();
                 authorize.requestMatchers("/auth/login").permitAll();
-                authorize.requestMatchers("/auth/refresh-token").permitAll(); 
+                authorize.requestMatchers("/auth/token").permitAll(); 
                 authorize.requestMatchers("/healthcheck").permitAll(); 
                 authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                 authorize.anyRequest().authenticated();
