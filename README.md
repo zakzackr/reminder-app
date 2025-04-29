@@ -7,8 +7,8 @@ https://github.com/user-attachments/assets/f47d2509-8b31-401c-a63d-392b25523308
 # Link
 https://shibainuu.com 
  
-username: user　　
-pasword: user　　
+username: user　　　　
+pasword: user　　　　　　
 で実際の操作を体験いただけます。
 
 # 機能
