@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { AuthContext } from "../contexts/AuthContext"
 
 
-const AUTH_BASE_URL = `${import.meta.env.VITE_BASE_URL}/api/auth`;
+const AUTH_BASE_URL = `${import.meta.env.VITE_BASE_URL}/auth`;
 
 export const registerAPICall = (registerObj) => axios.post(AUTH_BASE_URL + "/register", registerObj, {withCredentials: false})
 
