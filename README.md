@@ -9,7 +9,7 @@ https://shibainuu.com
 
 以下で実際の操作を体験いただけます。  
 username: user  
-password:user
+password: user
 
 
 # 機能
