@@ -43,9 +43,9 @@ password: user
 | 操作                     | メソッド | URI                          | 認可                                  |
 |--------------------------|----------|-------------------------------|---------------------------------------|
 | リマインダーの一覧表示   | GET      | /reminders                    | 全てのユーザー（ROLE_ADMIN, ROLE_USER） |
-| リマインダーの追加       | POST     | /reminders                    | 全てのユーザー                        |
-| リマインダーの編集       | PUT      | /reminders/{reminder_id}      | 全てのユーザー                        |
-| リマインダーの削除       | DELETE   | /reminders/{reminder_id}      | 全てのユーザー                        |
+| リマインダーの追加       | POST     | /reminders                    | 全てのユーザー（ROLE_ADMIN, ROLE_USER）|
+| リマインダーの編集       | PUT      | /reminders/{reminder_id}      | 全てのユーザー（ROLE_ADMIN, ROLE_USER） |
+| リマインダーの削除       | DELETE   | /reminders/{reminder_id}      | 全てのユーザー（ROLE_ADMIN, ROLE_USER）|
 
 
 # トークンベース認証
